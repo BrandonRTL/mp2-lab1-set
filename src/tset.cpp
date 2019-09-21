@@ -7,88 +7,109 @@
 
 #include "tset.h"
 
-TSet::TSet(int mp) : BitField(-1)
+TSet::TSet(int mp) : BitField(mp)
 {
+	MaxPower = mp;
 }
 
 // конструктор копирования
-TSet::TSet(const TSet &s) : BitField(-1)
+TSet::TSet(const TSet &s) : BitField(s.BitField)
 {
+	MaxPower = s.MaxPower;
 }
 
 // конструктор преобразования типа
-TSet::TSet(const TBitField &bf) : BitField(-1)
+TSet::TSet(const TBitField &bf) : BitField(bf)
 {
+	MaxPower = bf.GetLength();
 }
 
 TSet::operator TBitField()
 {
-	return *this;
+	return BitField;
 }
 
 int TSet::GetMaxPower(void) const // получить макс. к-во эл-тов
 {
-	return 0;
+	return MaxPower;
 }
 
 int TSet::IsMember(const int Elem) const // элемент множества?
 {
-    return 0;
+	return BitField.GetBit(Elem);
 }
 
 void TSet::InsElem(const int Elem) // включение элемента множества
 {
+	BitField.SetBit(Elem);
 }
 
 void TSet::DelElem(const int Elem) // исключение элемента множества
 {
+	if (Elem < 0)
+		throw Elem;
+	BitField.ClrBit(Elem);
 }
 
 // теоретико-множественные операции
 
 TSet& TSet::operator=(const TSet &s) // присваивание
 {
+	MaxPower = s.MaxPower;
+	BitField = s.BitField;
 	return *this;
 }
 
 int TSet::operator==(const TSet &s) const // сравнение
 {
-    return 0;
+	int flag = 0;
+	if (MaxPower == s.MaxPower)
+	{
+		if (BitField == s.BitField)
+			flag = 1;
+	}
+	return flag;
 }
 
 int TSet::operator!=(const TSet &s) const // сравнение
 {
-	return 0;
+	int flag = 1;
+	if (MaxPower == s.MaxPower)
+	{
+		if (BitField == s.BitField)
+			flag = 0;
+	}
+	return flag;
 }
 
 TSet TSet::operator+(const TSet &s) // объединение
 {
-	return 0;
+	return *this;
 }
 
 TSet TSet::operator+(const int Elem) // объединение с элементом
 {
-	return 0;
+	return *this;
 }
 
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
-	return 0;
+	return *this;
 }
 
 TSet TSet::operator*(const TSet &s) // пересечение
 {
-	return 0;
+	return *this;
 }
 
 TSet TSet::operator~(void) // дополнение
 {
-	return 0;
+	return *this;
 }
 
 // перегрузка ввода/вывода
 
-istream &operator>>(istream &istr, TSet &s) // ввод 
+istream &operator>>(istream &istr, TSet &s) // ввод
 {
 	return istr;
 }
