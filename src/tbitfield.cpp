@@ -6,6 +6,7 @@
 // Битовое поле
 
 #include "tbitfield.h"
+#include <string>
 
 TBitField::TBitField(int len)
 {
@@ -179,16 +180,14 @@ TBitField TBitField::operator~(void) // отрицание
 
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {
-	int Length;
-	int Tmp;
-	istr >> Length;
-	bf = TBitField(Length);
-	for (int i = 0; i < bf.BitLen; i++)
+	string Tmp;
+	istr >> Tmp;
+	bf = TBitField(Tmp.size());
+	for (int i = 0; i < bf.BitLen; i++) 
 	{
-		istr >> Tmp;
-		if (Tmp == 1)
+		if (Tmp[i] == 1) 
 			bf.SetBit(i);
-		else if (Tmp != 0)
+		else  if (Tmp[i] != 0)
 			throw "Not a bitfield";
 	}
 	return istr;
@@ -196,7 +195,7 @@ istream &operator>>(istream &istr, TBitField &bf) // ввод
 
 ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 {
-	for (int i = 0; i < bf.BitLen; ++i)
+	for (int i = 0; i < bf.BitLen; ++i) 
 		cout << bf.GetBit(i);
 	return ostr;
 }
