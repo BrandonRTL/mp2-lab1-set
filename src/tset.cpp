@@ -97,11 +97,11 @@ TSet TSet::operator+(const int Elem) // объединение с элемент
 	TSet Tmp = *this;
 	Tmp.InsElem(Elem);
 	return Tmp;
-}
+} 
 
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
-	TSet Tmp = *this;
+	TSet Tmp = *this; 
 	Tmp.DelElem(Elem);
 	return Tmp;
 }
@@ -127,10 +127,13 @@ TSet TSet::operator~(void) // дополнение
 
 istream &operator>>(istream &istr, TSet &s) // ввод
 {
+	istr >> s.BitField;
+	s.MaxPower = s.BitField.GetLength();
 	return istr;
 }
 
 ostream& operator<<(ostream &ostr, const TSet &s) // вывод
 {
+	ostr << s.BitField;
 	return ostr;
-}
+}   

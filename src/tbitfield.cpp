@@ -179,6 +179,18 @@ TBitField TBitField::operator~(void) // отрицание
 
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {
+	int Length;
+	int Tmp;
+	istr >> Length;
+	bf = TBitField(Length);
+	for (int i = 0; i < bf.BitLen; i++)
+	{
+		istr >> Tmp;
+		if (Tmp == 1)
+			bf.SetBit(i);
+		else if (Tmp != 0)
+			throw "Not a bitfield";
+	}
 	return istr;
 }
 
