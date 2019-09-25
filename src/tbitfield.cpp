@@ -13,7 +13,7 @@ TBitField::TBitField(int len)
 	if (len <= 0) throw "Length is not correct";
 	BitLen = len;
 	MemLen = (BitLen - 1) / (8 * sizeof(TELEM)) + 1;
-	pMem = new unsigned int[MemLen];
+	pMem = new TELEM[MemLen];
 	for (int i = 0; i < MemLen; i++)
 		pMem[i] = 0;
 }
@@ -86,7 +86,10 @@ int TBitField::GetBit(const int n) const // получить значение б
 		throw "Not correct";
 	}
 	int i = GetMemIndex(n);
-	return (pMem[i] & GetMemMask(n));
+	int Bit = 0;
+	if (pMem[i] & GetMemMask(n))
+		Bit = 1;
+	return Bit;
 }
 
 // битовые операции
@@ -196,6 +199,6 @@ istream &operator>>(istream &istr, TBitField &bf) // ввод
 ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 {
 	for (int i = 0; i < bf.BitLen; ++i) 
-		cout << bf.GetBit(i);
+		ostr << bf.GetBit(i);
 	return ostr;
 }

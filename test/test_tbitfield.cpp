@@ -2,6 +2,15 @@
 
 #include <gtest.h>
 
+TEST(TBitField, can_set_and_get_bit_1) {
+    const int size = 70;
+    TBitField bf(size);
+    const int bitNum = 33;
+
+    bf.SetBit(bitNum);
+
+    ASSERT_EQ(1, bf.GetBit(bitNum));
+} 
 TEST(TBitField, can_create_bitfield_with_positive_length)
 {
   ASSERT_NO_THROW(TBitField bf(3));
