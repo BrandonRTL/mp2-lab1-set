@@ -160,15 +160,21 @@ TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 {
+	int len = MemLen;
 	int Max = BitLen;
 	int Min = bf.BitLen;
 	if (bf.BitLen >= BitLen)
 	{
+		len = bf.MemLen;
 		Max = bf.BitLen;
 		Min = BitLen;
 	}
 	TBitField temp(Max);
-	for (int i = 0; i < Min; i++)
+	for (int i = 0; i < len - 1; i++)
+	{
+		temp.pMem[i] = bf.pMem[i] & pMem[i]; // делаем И с телемами, пока они еще есть
+	}
+	for (int i = (len-1)*sizeof(TELEM)*8; i < Min; i++)
 	     if (bf.GetBit(i) && GetBit(i))
 			 temp.SetBit(i);
 	return temp;
