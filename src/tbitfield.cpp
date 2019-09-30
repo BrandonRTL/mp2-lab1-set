@@ -49,7 +49,7 @@ TELEM TBitField::GetMemMask(const int n) const // битовая маска дл
 	{
 		throw "Not correct";
 	}
-	return 1 << (n & (sizeof(TELEM) * 8 - 1));
+	return TELEM(1) << (n & (sizeof(TELEM) * 8 - 1));// мы же пытались двигать 32-разрядную единицу непонятно куда, а теперь давайте двигать многоразрядную 
 }
 
 // доступ к битам битового поля
@@ -143,24 +143,36 @@ int TBitField::operator!=(const TBitField &bf) const // сравнение
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
-	int TmpLen = BitLen;
-	if (TmpLen < bf.BitLen)
-		TmpLen = bf.BitLen;
-	TBitField Tmp(TmpLen);
-	for (int i = 0; i < TmpLen; i++)
-		Tmp.pMem[i] = pMem[i] | bf.pMem[i];
-	return Tmp;
+	int len = BitLen;
+	if (bf.BitLen > len)
+		len = bf.BitLen;
+	TBitField temp(len);
+	for (int i = 0; i < MemLen; i++)
+	{
+		temp.pMem[i] = pMem[i];
+	}
+	for (int i = 0; i < bf.MemLen; i++)
+	{
+		temp.pMem[i] |= bf.pMem[i];
+	}
+	return temp;
 }
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 {
-	int TmpLen = BitLen;
-	if (TmpLen < bf.BitLen)
-		TmpLen = bf.BitLen;
-	TBitField Tmp(TmpLen);
-	for (int i = 0; i < TmpLen; i++)
-		Tmp.pMem[i] = pMem[i] & bf.pMem[i];
-	return Tmp;
+	int Max = BitLen;
+	int Min = bf.BitLen;
+	if (bf.BitLen >= BitLen)
+	{
+		Max = bf.BitLen;
+		Min = BitLen;
+	}
+	TBitField temp(Max);
+	for (int i = 0; i < Min; i++)
+	     if (bf.GetBit(i) && GetBit(i))
+			 temp.SetBit(i);
+	return temp;
+
 }
 
 TBitField TBitField::operator~(void) // отрицание
